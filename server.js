@@ -4,52 +4,13 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server);
 const path = require("path");
-const { engine } = require("express-handlebars");
-const { getAll, postProduct } = require("./Controller/productos");
-const configKnexMysql = {
-  client: "mysql",
-  connection: {
-    host: "127.0.0.1",
-    user: "root",
-    password: "",
-    database: "ecommerce",
-  },
-  pool: { min: 0, max: 7 },
-};
-const configSqlLite = {
-  client: "sqlite3",
-  connection: { filename: "./DB/ecommerce.sqlite" },
-};
-const {
-  DB,
-  createTableChats,
-  createTableProducts,
-} = require("./model/db.model");
-const db = new DB(configSqlLite, "chats");
+require("dotenv").config();
 
-createTableProducts(configKnexMysql, "productos");
-createTableChats(configSqlLite, "chats");
+app.use(express.static(__dirname + "./public"));
 
-app.use(express.static("./public"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.engine(
-  "handlebars",
-  engine({
-    extname: "hbs",
-    defaultLayout: "main.hbs",
-    layoutsDir: path.resolve(__dirname, "./views/layouts"),
-    partialsDir: path.resolve(__dirname, "./views/partials"),
-  })
-);
-
-app.set("views", "./views");
-app.set("view engine", "handlebars");
-
-app.get("/productos", getAll);
-
-app.post("/productos", postProduct);
+app.get("/api/productos-test", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./views/products-template-test.html"));
+});
 
 const emitir = () => {
   const mensaje = db.getAllMsj();

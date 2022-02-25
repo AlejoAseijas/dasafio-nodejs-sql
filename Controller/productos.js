@@ -1,16 +1,5 @@
-const { DB } = require("../model/db.model");
-const configKnexMysql = {
-  client: "mysql",
-  connection: {
-    host: "127.0.0.1",
-    user: "root",
-    password: "",
-    database: "ecommerce",
-  },
-  pool: { min: 0, max: 7 },
-};
-const db = new DB(configKnexMysql, "productos");
-
+const MockData = require("../model/mocks/products");
+const productsMock = new MockData("producto");
 const getAll = async (req, res) => {
   try {
     const data = await db.getAllProduct();
