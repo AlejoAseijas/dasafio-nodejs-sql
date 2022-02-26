@@ -23,72 +23,58 @@ const config = require("../../database.config");
   }
 })();
 
-class MongoDbContainer {
-  constructor(name, Schema, collection) {
-    this.model = mongoose.model(name, Schema, collection);
+class MongoDBContainer {
+  constructor(collection, schema) {
+    this.model = mongoose.model(collection, schema);
   }
-  async save(data) {
+
+  async createData(data) {
     try {
-      return await this.model.create(data);
-    } catch (err) {
-      return err;
+      const dataComplete = { timeStamp: Date.now(), ...data };
+      return await this.model.create(dataComplete);
+    } catch (error) {
+      throw new Error(`No se pudo guardar: ${error}`);
     }
   }
 
-  async getAll() {
+  async getAllDataOrById(id) {
     try {
-      let documents = await this.model.find();
-      return documents;
-    } catch (err) {
-      return err;
-    }
-  }
-  async getById(id) {
-    try {
-      let document = await this.model.findById(id);
-      return document;
-    } catch (err) {
-      return err;
+      if (id) {
+        const result = await this.model.findById(id);
+
+        if (!result) {
+          throw new Error(`No se encontro el documento con id: ${id}`);
+        }
+        return result;
+      }
+
+      return await this.model.find({}, { _id: 0, __v: 0 });
+    } catch (error) {
+      throw new Error(`Error al obtener todos los datos: ${error}`);
     }
   }
 
-  async deleteById(id) {
+  async updateData(id, data) {
     try {
-      let document = await this.model.findByIdAndDelete(id);
-      return true;
-    } catch (err) {
-      return err;
-    }
-  }
-
-  async updateById(id, producto) {
-    try {
-      let document = await this.model.findByIdAndUpdate(id, producto);
-      return document;
-    } catch (err) {
-      return err;
-    }
-  }
-
-  async addSubDocToDocumentId(idDoc, subDoc) {
-    try {
-      await this.model.findByIdAndUpdate(idDoc, {
-        $push: { products: subDoc },
+      const dataUpdate = await this.model.findByIdAndUpdate(id, data, {
+        new: true,
       });
-    } catch (err) {
-      return err;
+      if (!dataUpdate) {
+        throw new Error(`No se encontro información con id: ${id}`);
+      }
+      return dataUpdate;
+    } catch (error) {
+      throw new Error(`Error al actualizar: ${error}`);
     }
   }
 
-  async eliminateSubDocIdByDocumentId(idDocument, idSubDoc) {
+  async deleteData(id) {
     try {
-      await this.model.findByIdAndUpdate(idDocument, {
-        $pull: { products: { _id: idSubDoc } },
-      });
-    } catch (err) {
-      return err;
+      await this.model.findByIdAndDelete(id);
+    } catch (error) {
+      throw new Error(`No se pudo eliminar: ${error}`);
     }
   }
 }
 
-module.exports = MongoDbContainer;
+module.exports = MongoDBContainer;

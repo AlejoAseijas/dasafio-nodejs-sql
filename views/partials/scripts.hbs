@@ -1,0 +1,68 @@
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+{{!--
+<script src="/public/index.js"></script> --}}
+
+<script>
+    const socket = io();
+
+    function getDateTime() {
+
+        let date = new Date();
+
+        let hour = date.getHours();
+        hour = (hour < 10 ? "0" : "") + hour;
+
+        let min = date.getMinutes();
+        min = (min < 10 ? "0" : "") + min;
+
+        let sec = date.getSeconds();
+        sec = (sec < 10 ? "0" : "") + sec;
+
+        let year = date.getFullYear();
+
+        let month = date.getMonth() + 1;
+        month = (month < 10 ? "0" : "") + month;
+
+        let day = date.getDate();
+        day = (day < 10 ? "0" : "") + day;
+
+        return day + "/" + month + "/" + year + "   " + hour + ":" + min + ":" + sec;
+    }
+
+    function sendMessage() {
+        const message = {
+            nombre: document.getElementById("email").value,
+            text: document.getElementById("mensaje").value,
+        };
+
+        socket.emit("incomingMessage", message);
+        document.getElementById("mensaje").value = "";
+        document.getElementById("mensaje").focus();
+    }
+
+    socket.on("chat", (messages) => {
+        const texto = messages
+            .map((mensaje) => {
+                return `<div class='d-flex flex-row' style="gap:5px;">
+    <b style="color:blue;">${mensaje.nombre}</b>
+    <p style="color:brown;">[${getDateTime()}]:</p>
+    <i style="color:green;">${mensaje.text}</i>
+
+    </div>`;
+            })
+            .join(" ");
+
+        document.getElementById("messages").innerHTML = texto;
+    });
+
+</script>

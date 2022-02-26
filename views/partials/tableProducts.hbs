@@ -1,0 +1,27 @@
+{{#if nothing }}
+<p class="text-center">No se encontraron productos...</p>
+{{/if}}
+
+{{#if tableProducts}}
+<h1 class="text-center">Vista de productos</h1>
+<div class="container p-2 text-center">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" class="table-dark text-center">Nombre</th>
+                <th scope="col" class="table-dark text-center">Precio</th>
+                <th scope="col" class="table-dark text-center">Foto</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td class="text-center">{{this.title}}</td>
+                <td class="text-center">{{this.price}}</td>
+                <td class="text-center"> <img src={{this.thumbnail}} style="width: 70px;" /> </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+{{/if}}

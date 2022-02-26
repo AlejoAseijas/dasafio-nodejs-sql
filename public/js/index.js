@@ -104,14 +104,14 @@ socket.on("chat", (messages) => {
 });
 
 (async () => {
-  const productos = await fetch("http://localhost:3000/api/productos", {
+  const productos = await fetch("http://localhost:3000/api/productos-test", {
     headers: { "Content-Type": "application/json" },
   });
 
   if (productos.status === 200) {
     const productosJson = await productos.json();
 
-    fetch("http://localhost:3000/template/productos.tpl")
+    fetch("http://localhost:3000/template/products.tpl")
       .then((res) => res.text())
       .then((data) => {
         const template = Handlebars.compile(data);

@@ -8,3 +8,4 @@ switch (process.env.DATA_SOURCE) {
     chatDao = new ChatDaoMongoDB();
     break;
 }
+module.exports = chatDao;
