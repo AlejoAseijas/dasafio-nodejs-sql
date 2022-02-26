@@ -4,12 +4,19 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server);
 const path = require("path");
+const routes = require("./router/routes");
 require("dotenv").config();
 
 app.use(express.static(__dirname + "./public"));
 
-app.get("/api/productos-test", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./views/products-template-test.html"));
+app.use("/api", routes);
+
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./public/index.html"));
+});
+
+app.get("/productos-test", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./public/products-template-test.html"));
 });
 
 const emitir = () => {

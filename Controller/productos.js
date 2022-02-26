@@ -1,5 +1,12 @@
 const MockData = require("../model/mocks/products");
 const productsMock = new MockData("producto");
+
+const mockProductController = (req, res, next) => {
+  const mocksProducts = productsMock.populate(5);
+  next();
+  return res.status(200).json(mocksProducts);
+};
+
 const getAll = async (req, res) => {
   try {
     const data = await db.getAllProduct();
@@ -18,4 +25,4 @@ const postProduct = async (req, res) => {
   }
 };
 
-module.exports = { getAll, postProduct };
+module.exports = { getAll, postProduct, mockProductController };
