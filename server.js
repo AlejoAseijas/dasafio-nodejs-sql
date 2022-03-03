@@ -45,10 +45,10 @@ const emitir = async () => {
 
 io.on("connection", (socket) => {
   emitir();
-  socket.on("incomingMessage", (message) => {
+  socket.on("incomingMessage", async (message) => {
     emitir();
-    if (message.nombre) {
-      db.save(message);
+    if (message) {
+      await chatDao.createData(message);
       emitir();
     }
   });
