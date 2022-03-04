@@ -32,15 +32,7 @@ app.use(
 
 app.set("view engine", "ejs");
 
-app.use("/api", routes);
-
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./public/index.html"));
-});
-
-app.get("/productos-test", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./public/products-template-test.html"));
-});
+app.use("/", routes);
 
 const emitir = async () => {
   const msj = await chatDao.getAllDataOrById();

@@ -3,6 +3,11 @@ const socket = io();
 const $ = (selector) => document.querySelector(selector);
 
 const button = $("#buttonSend");
+const btnLogOut = $("#btn-logOut");
+
+btnLogOut.addEventListener("click", () => {
+  window.location.href = "/logout";
+});
 
 const deNormalizeData = (data) => {
   const schemaAuthor = new normalizr.schema.Entity(
