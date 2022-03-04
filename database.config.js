@@ -1,6 +1,6 @@
 module.exports = {
   mongodb: {
-    uri: "mongodb://admin:Saludavanzada2022@31.220.17.144:27017/ecommerce",
+    uri: "mongodb+srv://admin:admin2022@cluster0.mlaj3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     user: "admin",
     password: "Saludavanzada2022",
   },
