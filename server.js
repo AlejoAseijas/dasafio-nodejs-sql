@@ -6,36 +6,40 @@ const io = require("socket.io")(server);
 const path = require("path");
 const routes = require("./router/routes");
 require("dotenv").config();
-const { engine } = require("express-handlebars");
 const chatDao = require("./model/DAOS/index");
 const normalizedData = require("./utils/normalizedData");
+const config = require("./database.config");
+//
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+//
+
+const passport = require("./middleware/auth/passport");
 
 app.use(express.static("./public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.engine(
-  "handlebars",
-  engine({
-    extname: "hbs",
-    defaultLayout: "main.hbs",
-    layoutsDir: path.resolve(__dirname, "./views/layouts"),
-    partialsDir: path.resolve(__dirname, "./views/partials"),
+app.use(
+  session({
+    store: MongoStore.create({ mongoUrl: config.mongodb.uri }),
+    secret: "ÑsecretÑ",
+    saveUninitialized: false,
+    resave: false,
+    rolling: true,
+    cookie: {
+      maxAge: 60000,
+    },
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.set("views", "./views");
-app.set("view engine", "handlebars");
+app.set("view engine", "ejs");
 
-app.use("/api", routes);
-
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./public/index.html"));
-});
-
-app.get("/productos-test", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./public/products-template-test.html"));
-});
+app.use("/", routes);
 
 const emitir = async () => {
   const msj = await chatDao.getAllDataOrById();
