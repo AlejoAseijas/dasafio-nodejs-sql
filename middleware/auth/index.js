@@ -1,5 +1,5 @@
 function authWeb(req, res, next) {
-  if (req.session?.name) {
+  if (req.isAuthenticated()) {
     next();
   } else {
     res.redirect("/login");
@@ -7,7 +7,7 @@ function authWeb(req, res, next) {
 }
 
 function authApi(req, res, next) {
-  if (req.session?.name) {
+  if (req.isAuthenticated()) {
     next();
   } else {
     res.status(401).json({ error: "no autorizado!" });

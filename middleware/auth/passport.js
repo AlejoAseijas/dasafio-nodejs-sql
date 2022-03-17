@@ -5,7 +5,6 @@ const bCrypt = require("bcrypt");
 const UsersDao = require("../../model/DAOS/users/index");
 const { formatUserForDB } = require("../../utils/user.utils");
 
-
 const User = new UsersDao();
 
 const salt = () => bCrypt.genSaltSync(10);
@@ -21,14 +20,17 @@ passport.use(
       password: encrypt(password),
     };
     const newUser = formatUserForDB(userObject);
-    User.createData(newUser)
-      .then((user) => {
+    const sendData = async () => {
+      try {
+        console.log("aca: ", newUser);
+        let user = await User.createData(newUser);
         return done(null, user);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log("Error en el registro ==> ", error);
         return done(error);
-      });
+      }
+    };
+    sendData();
   })
 );
 
