@@ -82,4 +82,6 @@ router.get("/home/productos-test", authWeb, (req, res) => {
 
 router.get("/productos-test", mockProductController);
 
+router.get("/info", (req, res) => {});
+
 module.exports = router;
