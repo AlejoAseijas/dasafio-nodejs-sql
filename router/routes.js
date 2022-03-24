@@ -4,7 +4,8 @@ const { mockProductController } = require("../Controller/productos");
 const path = require("path");
 const { authWeb } = require("../middleware/auth/index");
 const passport = require("../middleware/auth/passport");
-
+const { fork } = require("child_process");
+const getRandomController = require("../Controller/random.controller");
 router.get("/", (req, res) => {
   res.redirect("/home");
 });
@@ -82,6 +83,19 @@ router.get("/home/productos-test", authWeb, (req, res) => {
 
 router.get("/productos-test", mockProductController);
 
-router.get("/info", (req, res) => {});
+router.get("/info", (req, res) => {
+  const info = {
+    directorio: process.cwd(),
+    memory: process.memoryUsage(),
+    processId: process.pid,
+    node: process.version,
+    os: process.platform,
+    inputArgs: process.argv,
+    path: process.execPath,
+  };
+  res.render("info.ejs", { info });
+});
+
+router.get("/random/:quantity?", getRandomController);
 
 module.exports = router;

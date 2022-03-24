@@ -3,12 +3,13 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server);
-const path = require("path");
 const routes = require("./router/routes");
 require("dotenv").config();
 const chatDao = require("./model/DAOS/index");
 const normalizedData = require("./utils/normalizedData");
 const config = require("./database.config");
+const PORT = require("./port.config");
+
 //
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
@@ -58,6 +59,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log(`Running on port: ${3000}`);
+server.listen(PORT, () => {
+  console.log(`Running on port: ${PORT}`);
 });
