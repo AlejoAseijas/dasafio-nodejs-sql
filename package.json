@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "start-dev": "nodemon --require dotenv/config index.js  --port=3000 --mode='cluster'",
+    "fork": "pm2 start index.js --name='desafio-Nginx' --watch -- --port=8081",
+    "cluster": "pm2 start index.js --name='desafio-nginx-Cluster' --watch -i max -- --port=8082",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,20 +19,17 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
-    "express": "^4.17.2",
-    "express-handlebars": "^6.0.2",
+    "express": "^4.17.1",
     "express-session": "^1.17.2",
     "faker": "^5.0.0",
-    "knex": "^0.95.15",
+    "forever": "^4.0.3",
     "moment": "^2.29.1",
     "mongoose": "^6.2.3",
-    "mysql": "^2.18.1",
     "normalizr": "^3.6.1",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
+    "pm2": "^5.2.0",
     "socket.io": "^4.4.1",
-    "sqlite3": "^5.0.2",
-    "uuid": "^8.3.2",
     "yargs": "^17.3.1"
   }
 }
