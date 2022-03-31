@@ -4,8 +4,9 @@ const { mockProductController } = require("../Controller/productos");
 const path = require("path");
 const { authWeb } = require("../middleware/auth/index");
 const passport = require("../middleware/auth/passport");
-const { fork } = require("child_process");
 const getRandomController = require("../Controller/random.controller");
+const CPUs = require("os").cpus().length;
+
 router.get("/", (req, res) => {
   res.redirect("/home");
 });
@@ -90,6 +91,7 @@ router.get("/info", (req, res) => {
     processId: process.pid,
     node: process.version,
     os: process.platform,
+    CPUs,
     inputArgs: process.argv,
     path: process.execPath,
   };

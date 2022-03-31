@@ -3,12 +3,16 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server);
+
+const cluster = require("cluster");
+const numCPUs = require("os").cpus().length;
+
 const routes = require("./router/routes");
 require("dotenv").config();
 const chatDao = require("./model/DAOS/index");
 const normalizedData = require("./utils/normalizedData");
 const config = require("./database.config");
-const PORT = require("./port.config");
+const { PORT, MODE } = require("./port.config");
 
 //
 const session = require("express-session");
@@ -59,6 +63,31 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Running on port: ${PORT}`);
-});
+if (MODE === "cluster") {
+  if (cluster.isPrimary) {
+    console.log(`Primary ${process.pid} is running`);
+
+    // Fork workers.
+    for (let i = 0; i < numCPUs; i++) {
+      cluster.fork();
+    }
+
+    cluster.on("exit", (worker, code, signal) => {
+      console.log(`worker ${worker.process.pid} died`);
+    });
+  } else {
+    server.listen(PORT, () => {
+      console.log(
+        `Escuchando en el puerto ${PORT}`,
+        `Worker ${process.pid} started`
+      );
+    });
+  }
+} else {
+  server.listen(PORT, () => {
+    console.log(
+      `Escuchando en el puerto ${PORT}`,
+      `Worker ${process.pid} Fork`
+    );
+  });
+}
