@@ -1,10 +1,10 @@
-#Parametros
+# Parametros
 
 --require dotenv/config
 --port= <port> // Default 8080
 --mode='<cluster | fork>' // Default Fork
 
-#Comandos de inicio de servidor
+# Comandos de inicio de servidor
 
 npm run start-dev.--> Ejecuta el servidor con nodemon y modo cluster.
 npx forever start --watch indexjs + parámetros. --> Ejecuta el servidor con forever.
