@@ -1,5 +1,6 @@
 const MockData = require("../model/mocks/products");
 const productsMock = new MockData("producto");
+const {errorLogger} = require(process.cwd() + "/log/logger/index.js");
 
 const mockProductController = (req, res, next) => {
   const mocksProducts = productsMock.populate(5);

@@ -7,6 +7,9 @@ const io = require("socket.io")(server);
 const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
 
+const log4js = require("log4js");
+const { warnLogger, errorLogger, infoLogger } = require("./log/logger/index");
+
 const routes = require("./router/routes");
 require("dotenv").config();
 const chatDao = require("./model/DAOS/index");
@@ -35,6 +38,25 @@ app.use(
     cookie: {
       maxAge: 60000,
     },
+  })
+);
+
+app.use(
+  log4js.connectLogger(infoLogger, {
+    level: "info",
+    statusRules: [{ from: 200, to: 299, level: "info" }],
+  })
+);
+app.use(
+  log4js.connectLogger(warnLogger, {
+    level: "warn",
+    statusRules: [{ codes: [404], level: "warn" }],
+  })
+);
+app.use(
+  log4js.connectLogger(errorLogger, {
+    level: "error",
+    statusRules: [{ codes: [400], level: "error" }],
   })
 );
 

@@ -8,13 +8,17 @@
     "start-dev": "nodemon --require dotenv/config index.js  --port=3000 --mode='cluster'",
     "fork": "pm2 start index.js --name='desafio-nginx' --watch -- --port=8081",
     "cluster": "pm2 start index.js --name='desafio-nginx-Cluster' --watch -i max -- --port=8082",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node benchmark.js",
+    "profiling": "node --prof server.js",
+    "start0x": "0x server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "autocannon": "^7.8.1",
     "bcrypt": "^5.0.1",
+    "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
@@ -23,6 +27,7 @@
     "express-session": "^1.17.2",
     "faker": "^5.0.0",
     "forever": "^4.0.3",
+    "log4js": "^6.4.4",
     "moment": "^2.29.1",
     "mongoose": "^6.2.3",
     "normalizr": "^3.6.1",

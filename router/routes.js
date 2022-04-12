@@ -6,6 +6,7 @@ const { authWeb } = require("../middleware/auth/index");
 const passport = require("../middleware/auth/passport");
 const getRandomController = require("../Controller/random.controller");
 const CPUs = require("os").cpus().length;
+const doCompression = require("../utils/doCompression");
 
 router.get("/", (req, res) => {
   res.redirect("/home");
@@ -96,6 +97,21 @@ router.get("/info", (req, res) => {
     path: process.execPath,
   };
   res.render("info.ejs", { info });
+});
+
+router.get("/infoNoLog/:compress?", doCompression, (req, res) => {
+  const info = {
+    directorio: process.cwd(),
+    memory: process.memoryUsage(),
+    processId: process.pid,
+    node: process.version,
+    os: process.platform,
+    CPUs,
+    inputArgs: process.argv,
+    path: process.execPath,
+  };
+
+  res.status(200).render("info.ejs", { info });
 });
 
 router.get("/random/:quantity?", getRandomController);
